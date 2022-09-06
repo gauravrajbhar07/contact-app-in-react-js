@@ -1,7 +1,10 @@
 #Video of the Project 
 
-<h1>hello</h1>
+<h1>video of the project </h1>
 
+<video width="320" height="240" controls>
+  <source src="contact-app\src\Video\contact-app.mp4" type="video/mp4">
+</video>
 
 # Getting Started with Create React App
 
