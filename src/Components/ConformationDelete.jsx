@@ -1,9 +1,8 @@
-  import React from 'react'
+import React from 'react'
 
-  const ConformationDelete = (props) => {
-    // eslint-disable-next-lin
-    // const {message} = props;
-    // eslint-disable-next-lin
+const ConformationDelete = (props) => {
+   
+
     return (
       <div className='container' style={{
         position:"fixed",
@@ -45,4 +44,4 @@
     )
   }
 
-  export default ConformationDelete
+export default ConformationDelete;

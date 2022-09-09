@@ -3,12 +3,23 @@ import {Link } from "react-router-dom";
 import ContactCard from "./ContactCard";
 
 
+
 const ContactList = (props) => {
-        console.log(props);
+
+
+    
+       
+
+
+
+    //    console.log(props);
+    
 
         const deleteContactHandler = (id) => {
             //console.log(props.getContactId(id));
             props.getContactId(id)
+            
+           
         };
 
 
@@ -41,7 +52,8 @@ const ContactList = (props) => {
                     <button className="ui button blue right" style={{justifyContent:"space-between"}}>Add Contact</button>
                 </Link>
                 </div>
-                
+
+              
                 {renderContactList}
                 
 

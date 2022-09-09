@@ -7,6 +7,8 @@ import Header from './Header';
 import AddContact from './AddContact';
 import ContactList from './ContactList';
 import ContactDetail from './ContactDetail';
+import api from "../api/contacts"
+import Editcontact from './EditContact';
 // eslint-disable-next-lin
 // import ConformationDelete from './ConformationDelete';
 
@@ -36,18 +38,34 @@ function App() {
     const [contacts, setContacts] = useState([])
 
 
-    const addContactHandler = (contact) => {
+    const addContactHandler = async (contact) => {
         console.log(contacts)
+
+
         //update the states 
         //rest  operator ...
-        setContacts([...contacts, { id: uuid(), ...contact }]);
+
+        const request = {
+            id: uuid(),
+            ...contact
+        }
+
+        console.log("hello")
+        const response = await api.post("/contacts",request)
+
+        setContacts([...contacts,response.data]);
+        console.log(response)
+        console.log(response.data)
 
     };
 
     //deleting the data
-    const removeContactHandler = (id) => {
-        if(window.confirm("ARE SURE TO DELETE THIS NUMBER ??")===true){
+    //delete data from rest api
+    const removeContactHandler =async (id) => {
 
+        await api.delete(`/Contacts/${id}`);
+        // if(window.confirm("ARE SURE TO DELETE THIS NUMBER ??")===true){
+        
             console.log(contacts)
             const newContactList = contacts.filter((contact) => {
             // console.log(contact)
@@ -56,15 +74,15 @@ function App() {
             return (contact.id !== id);
             });
 
-        //  console.log(" i m newContactList", newContactList)
+        console.log(" i m newContactList", newContactList)
 
             setContacts(newContactList);
 
-        }
-        else{
-            alert("Number is not Deleted ")
-            return false;
-        }
+        // }
+        // else{
+        //     alert("Number is not Deleted ")
+        //     return false;
+        // }
         
         
 
@@ -75,15 +93,59 @@ function App() {
     //use effect to persisting the data 
     //using use effect 
 
-    useEffect(() => {
-        const retriveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-        if (retriveContacts) setContacts(retriveContacts);
 
-    }, [])
+    //commenting the local host data retriving 
+
+    
+        // const retriveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+        // if (retriveContacts) setContacts(retriveContacts);
+
+    // useEffect(() => {
+    //     const getAllContacts = async () ={
+    //         const allContacts = await retriveContacts()
+
+    //     }
+
+
+
+    // }, [])
+
+    useEffect(()=>{
+        const getAllContacts = async () => {
+            const allContacts = await retriveContacts();
+            if(allContacts) setContacts(allContacts);
+        }
+        getAllContacts();
+    },[]);
+
+
+
+
+    //fetch all contact 
+    //and retriving a data 
+    const retriveContacts = async () => {
+        const respone  = await api.get("/contacts");
+        //using asyn and await
+        return respone.data;
+
+    }
 
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
     }, [contacts])
+
+
+    //update contact 
+
+    const updateContactHandler = async (contact) => {
+
+        const response = await api.put(`/contacts/${contact.id}`,contact)
+        console.log(response.data)
+        const {id,name,email} = response.data;
+        setContacts(contacts.map(contact => {
+            return contact.id === id ? {...response.data} :contact;
+        }))
+    };
 
 
 
@@ -109,10 +171,19 @@ function App() {
                         path="/add"
                         render={(props) => (
                             <AddContact {...props} addContactHandler={addContactHandler} />
+                        
                         )}
                     />
                     {/* <Route path = "/" component={ContactList} /> */}
 
+
+                    <Route
+                        path="/edit"
+                        render={(props) => (
+                            <Editcontact {...props} updateContactHandler={updateContactHandler} />
+                        
+                        )}
+                    />
 
                     <Route path="/contact/:id" component={ContactDetail} />         
 
