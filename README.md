@@ -2,7 +2,7 @@
 
 <h1>video of the project </h1>
 
-<img src="./contact-app.gif">
+<img src="./Final-contact-app.gif">
 
 # Getting Started with Create React App
 
